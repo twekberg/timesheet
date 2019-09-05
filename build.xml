@@ -1,0 +1,78 @@
+<project name="TIMESHEET" default="dist" basedir=".">
+
+  <!-- set global properties for this build -->
+  <property name="src" value="src"/>
+  <property name="common" value="common"/>
+  <property name="build" value="classes"/>
+  <property name="version" value="1.0"/>
+
+  <!-- init target -->
+  <target name="init">
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="compile.common" depends="init">
+    <!-- Compile the java code from ${common} into ${build} -->
+    <javac debug="yes" srcdir="${common}" destdir="${build}">
+    </javac>
+  </target>
+
+  <target name="compile" depends="compile.common">
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac debug="yes" srcdir="${src}" destdir="${build}">
+      <classpath>
+        <pathelement location="lib/xstream-1.1.3.jar"/>
+      </classpath>
+      <compilerarg value="-Xlint"/>
+    </javac>
+  </target>
+
+  <target name="dist" depends="compile">
+    <jar jarfile="Ekberg-TIMESHEET-${version}.jar" basedir="${build}" update="yes">
+      <manifest>
+        <attribute name="Sealed" value="true"/>
+        <attribute name="Main-Class" value="org.ekberg.timer.Timesheet"/>
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="clean">
+    <!-- Delete the ${build} directory tree -->
+    <delete dir="${build}"/>
+  </target>
+
+  <target name="doc">
+    <mkdir dir="docs/api"/>
+    <javadoc packagenames="org.ekberg.*"
+           sourcePath="src"
+	   destdir="docs/api"
+           author="true"
+           version="true"
+           use="true"
+	   verbose="true"
+           windowtitle="Timer ${version} API">
+
+      <doctitle><![CDATA[<h1>Test</h1>]]></doctitle>
+      <bottom><![CDATA[<i>Copyright &#169; 2002 Tom Ekberg. All Rights Reserved.</i>]]></bottom>
+    </javadoc>
+  </target>
+
+  <target name="docprivate">
+    <mkdir dir="docs/api"/>
+    <javadoc packagenames="org.ekberg.*"
+           sourcePath="src"
+	   destdir="docs/api"
+           author="true"
+           version="true"
+           private="true"
+	   use="true"
+	   verbose="true"
+           windowtitle="Timer ${version} API">
+
+      <doctitle><![CDATA[<h1>Test</h1>]]></doctitle>
+      <bottom><![CDATA[<i>Copyright &#169; 2004 Tom Ekberg. All Rights Reserved.</i>]]></bottom>
+    </javadoc>
+  </target>
+
+</project>
